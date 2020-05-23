@@ -4,6 +4,7 @@ import {makeStyles} from "@material-ui/styles";
 import uniqueTansanite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
 import {Link} from "react-router-dom";
 import {ProductListHeader} from "../../components";
+import dummyData from "./dummydata";
 
 const useStyles = makeStyles(theme=>({
     container:{
@@ -36,91 +37,7 @@ const redColors = ['#FF6961','#FF5C5C','#FF1C00','#FF0800','#FF0000','#E34234','
 
 
 
-const dummyData = [
-    {
-        id:1,
-        imgSrc:uniqueTansanite,
-        name:"Tansanite",
-        price:"$12",
-        to:"/product-details/2",
-        gemstone:{id:21,name:"Tansanite"},
-        size:32,
-        metal:{id:1,name:"Platinum"},
-        colorHSLHLowLimit:0,
-        colorHSLHighLimit:30,
-        colorName:"red",
 
-    },
-    {
-        id:2,
-        imgSrc:uniqueTansanite,
-        name:"Tansanite",
-        price:"$14",
-        to:"/product-details/2",
-        gemstone:{id:23,name:"Tansanite"},
-        size:37,
-        metal:{id:2,name:"Rose Gold"},
-        colorHSLHLowLimit:0,
-        colorHSLHighLimit:30,
-        colorName:"red",
-
-    },
-    {
-        id:3,
-        imgSrc:uniqueTansanite,
-        name:"Tansanite",
-        price:"$14",
-        to:"/product-details/2",
-        gemstone:{id:21,name:"Tansanite"},
-        size:38,
-        metal:{id:3,name:"Red Gold"},
-        colorHSLHLowLimit:0,
-        colorHSLHighLimit:30,
-        colorName:"red",
-
-    },
-    {
-        id:4,
-        imgSrc:uniqueTansanite,
-        name:"Tansanite",
-        price:"$14",
-        to:"/product-details/2",
-        gemstone:{id:21,name:"Tansanite"},
-        size:40,
-        metal:{id:4,name:"Gold "},
-        colorHSLHLowLimit:30,
-        colorHSLHighLimit:70,
-        colorName:"yellow",
-    },
-    {
-        id:5,
-        imgSrc:uniqueTansanite,
-        name:"Tansanite",
-        price:"$14",
-        to:"/product-details/2",
-        gemstone:{id:1,name:"Tansanite"},
-        size:41,
-        metal:{id:5,name:"Silver "},
-        colorHSLHLowLimit:0,
-        colorHSLHighLimit:30,
-        colorName:"red",
-
-    },
-    {
-        id:6,
-        imgSrc:uniqueTansanite,
-        name:"Tansanite",
-        price:"$14",
-        to:"/product-details/2",
-        gemstone:{id:2,name:"Tansanite"},
-        size:42,
-        metal:{id:5,name:"Silver "},
-        colorHSLHLowLimit:260,
-        colorHSLHighLimit:284,
-        colorName:"light purple",
-    },
-
-]
 
 
 const ProductList = props=>{

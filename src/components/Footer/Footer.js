@@ -12,7 +12,10 @@ const useStyles = makeStyles(theme=>({
         backgroundColor:"black",
         color:"white",
         padding:"50px 20px",
-        fontFamily:"'Montserrat Alternates', sans-serif"
+        fontFamily:"'Montserrat Alternates', sans-serif",
+        position:"relative",
+        bottom:"0",
+
 
     },
     footerItem:{borderRight:"1px solid white",paddingRight:"20px"}

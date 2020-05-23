@@ -9,7 +9,10 @@ class RoutesWithLayout extends React.Component{
     render() {
       const {Component} = this.props;
       return(
-          <Route render={matchProps=>(
+          <Route
+              path={this.props.path}
+              exact={this.props.exact}
+              render={matchProps=>(
               <Component {...matchProps}/>
           )}>
 

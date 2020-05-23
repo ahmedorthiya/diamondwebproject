@@ -4,6 +4,10 @@ import {makeStyles} from "@material-ui/styles";
 import uniqueTransite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
 import fdia1 from "../../assets/images/fdia1.PNG";
 import fdia2 from "../../assets/images/fdia2.PNG";
+import MenuNoOfItems from "./MenuNoOfItems";
+import {useDispatch} from "react-redux";
+import {addItemToCart} from "../../store/actions/cart";
+import dummyData from "../ProductList/dummydata";
 
 
 const useStyles = makeStyles(theme=>({
@@ -46,10 +50,21 @@ const useStyles = makeStyles(theme=>({
 export default props =>{
     const classes = useStyles();
     const [noOfItems, setItems] = React.useState('');
+    const dispatch = useDispatch();
+
+    const data=dummyData.find(dData=> dData.id === parseInt(props.match.params.id));
+
 
     const handleChange = (event) => {
         setItems(event.target.value);
     };
+
+    const addToCart  = ()=>{
+        dispatch(addItemToCart({
+            ...data,
+            noOfItems:noOfItems ? noOfItems : 1,
+        }));
+    }
 
     return(
         <Grid container direction={"column"} className={classes.container} >
@@ -62,18 +77,16 @@ export default props =>{
 
              >
               <Typography variant={"h5"}>
-                  Tansanite
+                  {
+                      data.name
+                  }
               </Typography>
                  <Typography color={"secondary"} variant={"h6"}>
                  {/*    type | size | 10.57ct*/}
-                 Unique | 14mm | 10.57ct
+                     {data.gemstone.name} | {data.size} | {data.metal.name} | price- {data.price}
                  </Typography>
                  <Typography color={"secondary"} variant={"subtitle6"}>
-                     ndustry. Lorem Ipsum has been the industry's standard dummy text ever
-                     since the 1500s, when an unknown printer took a galley of type and scrambled it
-                     to make a type specimen book. It has survived not only five centuries, but also the
-                     leap into electronic typesetting, remaining essentially unchanged. It was popularised
-                     in the 1960s with the release of Letraset sh
+                     {data.description}
                  </Typography>
              </Grid>
             <Grid item
@@ -84,7 +97,7 @@ export default props =>{
                   lg={6}
                   style={{textAlign:"center"}}
                   xl={6} >
-                <img src={uniqueTransite} className={classes.productMainImg}/>
+                <img src={data.imgSrc} className={classes.productMainImg}/>
             </Grid>
             <Grid item
                   container
@@ -97,48 +110,26 @@ export default props =>{
             >
 
              <Grid item container >
-                 <img src={uniqueTransite} alt="" width={"30px"} height={"30px"} />
-                 <img src={uniqueTransite} alt="" width={"30px"} height={"30px"} />
-                 <img src={uniqueTransite} alt="" width={"30px"} height={"30px"} />
-                 <img src={uniqueTransite} alt="" width={"30px"} height={"30px"} />
-                 <img src={uniqueTransite} alt="" width={"30px"} height={"30px"} />
+                 {
+                     data.furtherImages.map((img,i)=>(
+                         <img key={i} src={img} alt="" width={"30px"} height={"30px"} />
+                     ))
+                 }
+
+
              </Grid>
 
 
 
                 <Grid item>
-                    <FormControl className={classes.formControl} fullWidth>
-                        <InputLabel id="demo-simple-select-label">No Of Items</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={noOfItems}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={4}>4</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={6}>6</MenuItem>
-                            <MenuItem value={7}>7</MenuItem>
-                            <MenuItem value={8}>8</MenuItem>
-                            <MenuItem value={9}>9</MenuItem>
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={11}>11</MenuItem>
-                            <MenuItem value={12}>12</MenuItem>
-                            <MenuItem value={13}>13</MenuItem>
-                            <MenuItem value={14}>14</MenuItem>
-                            <MenuItem value={15}>15</MenuItem>
-                        </Select>
-                    </FormControl>
+                   <MenuNoOfItems noOfItems={noOfItems} handleChange={handleChange} classes={classes}/>
 
 
                 </Grid>
 
 
                 <Grid item>
-                    <Button variant={"contained"} color={"primary"}>Add To Cart</Button>
+                    <Button variant={"contained"} color={"primary"} onClick={addToCart}>Add To Cart</Button>
                     </Grid>
                 <br/>
 
@@ -146,41 +137,58 @@ export default props =>{
                    <Typography color={"secondary"} variant={"subtitle6"}>
                        ndustry. Lorem Ipsum has been the industry's standard dummy text ever
                        since the 1500s, when an unknown printer took a galley of type and scrambled it
-                       to make a type specimen book. It has survived not only five centuries, but also the
-                       leap into electronic typesetting, remaining essentially unchanged. It was popularised
-                       in the 1960s with the release of Letraset sh
+
                    </Typography>
                </Grid>
 
             </Grid>
         </Grid>
             <br/>
+            {
+                data.furtherDetailImages.length > 0 || data.furtherDescription ? (
+
+
+
             <Grid item>
+                <Grid container justify={"center"} >
+
+            <Grid item style={{marginBottom:"30px"}}>
                 <Typography variant={"h5"}>
                     Further details
                 </Typography>
             </Grid>
 
             <br/>
-            <Grid item className={classes.widthSetter}>
-                <img src={fdia1} width={"200px"} height={"200px"}/>
-                <img src={fdia2} width={"200px"} height={"200px"}/>
-            </Grid>
+                    <Grid item className={classes.widthSetter}>
+                    {
+                        data.furtherDetailImages.length > 0 ?  (
+                            data.furtherDetailImages.map((img,i)=>(
+
+                                    <img src={img} key={i} width={"200px"} height={"200px"}/>
+
+
+                            ))
+                        ) : ""
+                    }
+                    </Grid>
 
 
             <Grid item className={classes.widthSetter}>
                <Typography>
-                   ndustry. Lorem Ipsum has been the industry's standard dummy text ever
-                   since the 1500s, when an unknown printer took a galley of type and scrambled it
-                   to make a type specimen book. It has survived not only five centuries, but also the
-                   leap into electronic typesetting, remaining essentially unchanged. It was popularised
-                   in the 1960s with the release of Letraset sh
+                   {
+                       data.furtherDescription ? data.furtherDescription : ""
+                   }
                </Typography>
             </Grid>
+                </Grid>
+            </Grid>
+                ): ""
+            }
 
 
 
 
+            <Button onClick={()=>props.history.push("/cart")}>Go to cart</Button>
 
 
 
