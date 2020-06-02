@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme=>({
           backgroundColor:theme.palette.common.bgColor,
 
 
+
     },
     diamondImg:{
          width:"250px",

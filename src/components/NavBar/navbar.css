@@ -24,10 +24,12 @@
     border-radius: 50%;
     position: fixed;
     top: 3.5rem;
-    right: 7.5rem;
+    right: 7rem;
     background-image: radial-gradient(#080808, #757575);
     z-index: 1000;
     transition: all 0.8s cubic-bezier(0.86, 0, 0.07, 1); }
+
+
 
 .navigation__nav {
     height: 100vh;
@@ -132,4 +134,13 @@ ul{
     padding:0 30px;
     margin-top: 30px;
 
+}
+
+@media(max-width: 769px){
+    .navigation__background{
+        right:6.5rem;
+    }
+    .navigation__icon{
+        margin-top: 2rem;
+    }
 }

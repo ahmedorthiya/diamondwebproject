@@ -1,14 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import uniqueTansanite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
 import MenuNoOfItems from "../ProductDetails/MenuNoOfItems";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {addItemToCart} from "../../store/actions/cart";
 
 const useStyles = makeStyles(theme=>({
+    root:{
+        backgroundColor:theme.palette.common.bgColor,
+
+    },
     container:{
         width:"70%",
         textAlign:"center",
+
 
         margin:"40px auto"
     },
@@ -19,16 +25,24 @@ const useStyles = makeStyles(theme=>({
 
 const Cart = props=>{
     const classes = useStyles();
-    const [noOfItems, setItems] = React.useState('');
+
     const cartItems = useSelector(state=>state.cart.items);
+    const  dispatch = useDispatch();
 
 
 
-    const handleChange = (event) => {
-        setItems(event.target.value);
+    const handleChange = (e,cartItem) => {
+       dispatch(addItemToCart({
+           ...cartItem,
+           noOfItems:e.target.value,
+       }));
     };
+
+
+
+
     return(
-        <Grid container >
+        <Grid container className={classes.root}>
             {
                 cartItems.map(item=>(
                     <Grid key={item.id} item container className={classes.container} alignItems={"center"}>
@@ -59,18 +73,14 @@ const Cart = props=>{
                               lg={4}
                               xl={4}
                         >
-                            <img className={classes.img} src={uniqueTansanite} width={"150px"} height={"150px"}/>
+                            <img className={classes.img} src={item.imgSrc} width={"150px"} height={"150px"}/>
                         </Grid>
 
                         <Grid item
-                              xs={12}
-                              sm={4}
-                              md={4}
-                              lg={4}
-                              xl={4}
+
                         >
                             <Grid container direction={"column"}>
-                                <MenuNoOfItems classes={classes} noOfItems={noOfItems} handleChange={handleChange}/>
+                                <MenuNoOfItems style={{width:120}}  classes={classes} noOfItems={item.noOfItems} handleChange={(e)=>handleChange(e,item)}/>
 
                                     {item.noOfItems } x  {item.price}
 

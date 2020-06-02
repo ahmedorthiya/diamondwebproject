@@ -1,13 +1,12 @@
 import React from "react";
 import {Grid,Button, Typography,FormControl,InputLabel,Select,MenuItem} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import uniqueTransite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
-import fdia1 from "../../assets/images/fdia1.PNG";
-import fdia2 from "../../assets/images/fdia2.PNG";
+
 import MenuNoOfItems from "./MenuNoOfItems";
 import {useDispatch} from "react-redux";
 import {addItemToCart} from "../../store/actions/cart";
 import dummyData from "../ProductList/dummydata";
+import {btnTransition} from "../../theme/ButtonStyle";
 
 
 const useStyles = makeStyles(theme=>({
@@ -45,11 +44,14 @@ const useStyles = makeStyles(theme=>({
     },
     widthSetter:{
         width:"90%",margin:"auto"
+    },
+    addItemToCart:{
+       ...btnTransition,
     }
 }))
 export default props =>{
     const classes = useStyles();
-    const [noOfItems, setItems] = React.useState('');
+    const [noOfItems, setItems] = React.useState(1);
     const dispatch = useDispatch();
 
     const data=dummyData.find(dData=> dData.id === parseInt(props.match.params.id));
@@ -123,13 +125,11 @@ export default props =>{
 
                 <Grid item>
                    <MenuNoOfItems noOfItems={noOfItems} handleChange={handleChange} classes={classes}/>
-
-
-                </Grid>
+                 </Grid>
 
 
                 <Grid item>
-                    <Button variant={"contained"} color={"primary"} onClick={addToCart}>Add To Cart</Button>
+                    <Button variant={"contained"} className={classes.addItemToCart} color={"primary"} onClick={addToCart}>Add To Cart</Button>
                     </Grid>
                 <br/>
 
@@ -188,7 +188,7 @@ export default props =>{
 
 
 
-            <Button onClick={()=>props.history.push("/cart")}>Go to cart</Button>
+
 
 
 

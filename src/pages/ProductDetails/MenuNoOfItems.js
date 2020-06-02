@@ -1,17 +1,37 @@
 import {FormControl, Grid, InputLabel, MenuItem, Select} from "@material-ui/core";
 import React from "react";
+import {makeStyles} from "@material-ui/styles";
+
+const useStyles = makeStyles(theme=>({
+    selectMenuItem:{
+        border:"1px solid black",
+        textAlign:"right",
+
+        "&:hover":{
+            outline:"none",
+            textDecoration:"none"
+        }
+    },
+
+}));
+
 
 export default props=>{
+    const classes = useStyles();
     return(
-        <FormControl className={props.classes.formControl} fullWidth>
-            <InputLabel id="demo-simple-select-label">No Of Items</InputLabel>
+        <FormControl className={props.classes ? props.classes.formControl : undefined}  >
+            <InputLabel  id="demo-simple-select-label">No Of Items</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={props.noOfItems}
                 onChange={props.handleChange}
+                style={props.style}
+                className={classes.selectMenuItem}
+               disableUnderline
+
             >
-                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={1} selected>1</MenuItem>
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>
                 <MenuItem value={4}>4</MenuItem>

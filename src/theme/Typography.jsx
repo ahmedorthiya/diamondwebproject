@@ -1,7 +1,7 @@
 export default {
     h5: {
         fontWeight: 500,
-        fontSize:"1.25rem",
+        fontSize:"1.5rem",
         fontFamily: "'Montserrat Alternates', sans-serif",
 
 
