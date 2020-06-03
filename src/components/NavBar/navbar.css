@@ -136,6 +136,12 @@ ul{
 
 }
 
+@media(min-width: 770px) and (max-width: 900px){
+    .navigation__icon{
+        margin-top: 2rem;
+    }
+}
+
 @media(max-width: 769px){
     .navigation__background{
         right:6.5rem;

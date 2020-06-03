@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useEffect,useCallback} from "react";
 import {Grid,Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import uniqueTansanite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
 import {Link} from "react-router-dom";
 import {ProductListHeader} from "../../components";
 import dummyData from "./dummydata";
+import axios from "axios";
+import {useDispatch} from "react-redux";
+import {addProducts} from "../../store/actions/product";
+
 
 const useStyles = makeStyles(theme=>({
     container:{
@@ -50,7 +54,16 @@ const ProductList = props=>{
        gemstone:{id:-1},
        metal:{id:-1}
    };
+   window.axios = axios;
     const [filterSettings,setFilterSettings] = React.useState(filters);
+    const dispatch = useDispatch();
+
+  const retrieveProducts = useCallback(async ()=>{
+      await dispatch(addProducts());
+  },[dispatch]);
+
+
+    useEffect(()=>{retrieveProducts();},[retrieveProducts]);
 
 
     const filterData =
