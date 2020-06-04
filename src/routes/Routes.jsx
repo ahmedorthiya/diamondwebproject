@@ -9,6 +9,7 @@ import {Footer,NavBar} from "../components";
 
 export default  props=>{
     return(
+        <div>
         <ThemeProvider theme={theme}>
 
             <BrowserRouter>
@@ -29,6 +30,7 @@ export default  props=>{
             </BrowserRouter>
 
         </ThemeProvider>
+        </div>
     )
 }
 

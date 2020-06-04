@@ -5,88 +5,99 @@ export const ADD_PRODUCTS = "ADD_PRODUCTS";
 export const addProducts = ()=>async dispatch =>{
     const res = await axios({
         method:"GET",
-        url:"http://localhost:8000/jsonapi/product?include=media,price,text&page%5Boffset%5D=0", // return price and page[offset]=
-        //   url:"http://localhost:8000/jsonapi/product?include=attribute%2Cmedia%2Cprice%2Cproduct%2Cproduct%2Fproperty%2Ctext&page%5Boffset%5D=0", // return price and page[offset]=
+        url:"http://localhost:8000/jsonapi/product?include=attribute,media,price,product,product/property,text&page%5Boffset%5D=0", // return price and page[offset]=
 
         headers:{ "Access-Control-Allow-Origin": "*",}
     })
 
+    const productList = [];
 
-    const itemAttributes = [];
-    const links = [];
-    const priceArray = [];
-    const mediaArray = [];
-    const textArray = [];
+
 
     res.data.data.map(item=>{
 
 
 
-        itemAttributes.push(item.attributes);
-        links.push(item.links);
+        const priceArray = [];
+        const attributeArray = [];
+        const mediaArray = [];
+        const product_property = [];
+        const textArray = [];
 
-        const prices =   item.relationships.price.data.map(priceItem=>{
+        if(item.relationships['price']) {
+            for (let i = 0; i < item.relationships['price'].data.length; i++) {
+                 const refId = item.relationships['price'].data[i].attributes['product.lists.refid'];
 
-            priceItem.attributes.productId = item.id;
-            return priceItem;
-        });
+                priceArray.push(refId);
+            }
+        }
+        if(item.relationships['attribute']) {
+            for (let i = 0; i < item.relationships['attribute'].data.length; i++) {
+                const refId = item.relationships['attribute'].data[i].attributes['product.lists.refid'];
 
-        const media =   item.relationships.media.data.map(priceItem=>{
+                attributeArray.push(refId);
+            }
+        }
+        if(item.relationships['media']) {
+            for (let i = 0; i < item.relationships['media'].data.length; i++) {
+                const refId = item.relationships['media'].data[i].attributes['product.lists.refid'];
 
-            priceItem.attributes.productId = item.id;
-            return priceItem;
-        });
-
-        const texts =   item.relationships.text.data.map(priceItem=>{
-
-            priceItem.attributes.productId = item.id;
-            return priceItem;
-        });
-
-
-        priceArray.push(...prices);
-        mediaArray.push(...media);
-        textArray.push(...texts);
-
-
-
-
-
-
-    });
-
-
-    const itemPrices = [];
-    const itemMedia = [];
-    const itemText = [];
-    res.data.included.map(item=>{
-        const priceIndex = priceArray.findIndex(priceItem=> priceItem.type === item.type && priceItem.id === item.id);
-        const mediaIndex =  mediaArray.findIndex(priceItem=> priceItem.type === item.type && priceItem.id === item.id)
-        const textIndex = textArray.findIndex(priceItem=> priceItem.type === item.type && priceItem.id === item.id);
-        if( priceIndex > -1){
-
-            itemPrices.push({...item,productId:priceArray[priceIndex].attributes.productId});
-        }else if( mediaIndex> -1){
-
-            itemMedia.push({...item,productId:mediaArray[mediaIndex].attributes.productId});
-        }else if( textIndex> -1){
-
-            itemText.push({...item,productId:textArray[textIndex].attributes.productId});
+                mediaArray.push(refId);
+            }
         }
 
-    })
+        if(item.relationships['product/property']) {
+            for (let i = 0; i < item.relationships['product/property'].data.length; i++) {
+                const refId = item.relationships['product/property'].data[i];
+
+                product_property.push({
+                    ...refId,
+                    productId:item.id,
+                });
+            }
+        }
+        if(item.relationships['text']) {
+            for (let i = 0; i < item.relationships['text'].data.length; i++) {
+                const refId = item.relationships['text'].data[i].attributes['product.lists.refid'];
+                textArray.push(refId);
+            }
+        }
+
+
+        // for(let key in item.relationships){
+        //     for (let i = 0; i < item.relationships[key].data.length; i++){
+        //         //products[6].relationships[key].data[i].attribute  // product.lists.refid
+        //         const refId = item.relationships[key].data[i].attributes['product.lists.refid'];
+        //
+        //         // console.log("refId is = ",{
+        //         //     key: refId,
+        //         // });
+        //     }
+        //
+        // }
+
+        productList.push({
+            ...item,
+            priceArray,
+            mediaArray,
+            product_property,
+            textArray,
+            attributeArray
+
+
+        })
+    });
+
 
 
 
     return dispatch({
         type:ADD_PRODUCTS,
-        payload :  {
-            itemAttributes: itemAttributes,
-            itemsLinks:links,
-            itemsPrices:itemPrices,
-            itemsMedia:itemMedia,
-            itemsText:itemText,
-        }
+        payload :{
+            itemData:productList,
+            includedData:res.data.included,
+
+        } ,
     })
 
 

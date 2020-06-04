@@ -1,23 +1,22 @@
 import React, {useEffect,useCallback} from "react";
-import {Grid,Typography} from "@material-ui/core";
+import {Grid,Typography,Button} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import uniqueTansanite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
 import {Link} from "react-router-dom";
 import {ProductListHeader} from "../../components";
 import dummyData from "./dummydata";
 import axios from "axios";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addProducts} from "../../store/actions/product";
 
 
+
 const useStyles = makeStyles(theme=>({
+
     container:{
 
           backgroundColor:theme.palette.common.bgColor,
-
-
-
-    },
+  },
     diamondImg:{
          width:"250px",
          height:"250px",
@@ -57,13 +56,32 @@ const ProductList = props=>{
    window.axios = axios;
     const [filterSettings,setFilterSettings] = React.useState(filters);
     const dispatch = useDispatch();
+    const products = useSelector(store=>store.products.items);
+    const includedData = useSelector(store=>store.products.includedData);
+    let priceValue = "";
 
   const retrieveProducts = useCallback(async ()=>{
       await dispatch(addProducts());
   },[dispatch]);
 
+  const firstProduct = products ? products[6] : "";
 
-    useEffect(()=>{retrieveProducts();},[retrieveProducts]);
+    useEffect(()=>{
+        retrieveProducts();
+
+    },[retrieveProducts]);
+
+    useEffect(()=>{
+        if(products.length > 0){
+
+            console.log("products is = ",products);
+            console.log("included Data is = ",includedData);
+
+
+
+
+        }
+    },[products]);
 
 
     const filterData =
@@ -75,8 +93,55 @@ const ProductList = props=>{
         );
 
 
+  const priceResult= (data,dataItem)=>{
+
+      if(data.priceArray.length > 0){
+          if(data.priceArray[0] === dataItem.id && dataItem.type === "price"){
+              // only get one supportive country currency
+              return dataItem.attributes['price.currencyid']+" "+ dataItem.attributes['price.value']
+          }
+      }
+
+      return "";
+
+  }
+
+  const colorAttribute = (data,dataItem)=>{
+      if(data.attributeArray.length > 0){
+
+
+
+          if(dataItem.type === "attribute" && dataItem.attributes['attribute.type'] === 'color' && data.attributeArray.find(item=>item === dataItem.id)){
+             console.log(" color name is = ", dataItem.attributes['attribute.label']," product Id = ",data.id);
+          }
+          // if(data.at[0] === dataItem.id && dataItem.type === "price"){
+          //     // only get one supportive country currency
+          //     return dataItem.attributes['price.currencyid']+" "+ dataItem.attributes['price.value']
+          // }
+      }
+
+      return "";
+  }
+
+  const media = (data,dataItem)=>{
+      colorAttribute(data,dataItem);
+
+      if(data.mediaArray.length > 0){
+          if(data.mediaArray[0] === dataItem.id && dataItem.type === "media"){
+              // only get one supportive country currency
+
+              return  dataItem.attributes['media.url'];
+          }
+      }
+
+      return "";
+
+  }
+
+
+
     const returnData = data=>(
-        data.map(data=>( <Grid
+        products.map(data=>( <Grid
                 key={data.id}
                 item
                 lg={4}
@@ -84,18 +149,41 @@ const ProductList = props=>{
                 xl={4}
                 xs={12}
                 component={Link}
-                to={data.to}
+                to={'/product-details/'+data.id}
                 style={{marginBottom:"20px"}}
             >
 
 
-                <img src={data.imgSrc} className={classes.diamondImg}/>
+
+                {
+                    includedData.map(dataItem=>(
+                        media(data,dataItem) ?
+                        <img src={   media(data,dataItem).includes("https://") ? media(data,dataItem) : "http://127.0.0.1:8000/"+media(data,dataItem)}  className={classes.diamondImg}/>
+                        : ""
+
+                    ))
+                }
+
 
                 <Typography color={"primary"} style={{display:"block"}} variant={"h6"}>
-                    {data.name} | {data.metal.name} | {data.gemstone.name}
+                    {data.attributes['product.label']}
+                    {/*| {data.metal.name} | {data.gemstone.name}*/}
                 </Typography>
                 <Typography color={"secondary"} variant={"subtitle6"}>
-                    {data.price} - size {data.size} - color {data.colorName}
+                    {/*{data.price} - size {data.size} - color {data.colorName}*/}
+                    {
+
+
+
+                        includedData.map((dataItem,i)=>(
+                            <div>{
+                             priceResult(data,dataItem)
+
+
+                            }</div>
+
+                        ))
+                    }
                 </Typography>
 
             </Grid>
@@ -127,15 +215,10 @@ const ProductList = props=>{
 
 
 
-
-
-
-
-
-
-
-
         </Grid>
+           <div style={{marginLeft:"auto",marginRight:"auto",textAlign:"center"}}>
+               <Button > Load More</Button>
+           </div>
         </div>
     )
 };

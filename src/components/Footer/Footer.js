@@ -8,7 +8,7 @@ import {makeStyles} from "@material-ui/styles";
 
 const useStyles = makeStyles(theme=>({
     footerContainer:{
-        marginTop:"20px",
+        paddingTop:"20px",
         backgroundColor:"black",
         color:"white",
         padding:"50px 20px",
