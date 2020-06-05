@@ -8,7 +8,7 @@ import dummyData from "./dummydata";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {addProducts} from "../../store/actions/product";
-
+import {priceResult,singleMedia as media} from "../../assets/selectFirstItemFromList";
 
 
 const useStyles = makeStyles(theme=>({
@@ -46,6 +46,7 @@ const redColors = ['#FF6961','#FF5C5C','#FF1C00','#FF0800','#FF0000','#E34234','
 
 const ProductList = props=>{
    const classes = useStyles();
+
    const filters = {
        setFilter:false,
        color:{hsl:{h:-2}},
@@ -58,30 +59,21 @@ const ProductList = props=>{
     const dispatch = useDispatch();
     const products = useSelector(store=>store.products.items);
     const includedData = useSelector(store=>store.products.includedData);
-    let priceValue = "";
+
 
   const retrieveProducts = useCallback(async ()=>{
       await dispatch(addProducts());
   },[dispatch]);
 
-  const firstProduct = products ? products[6] : "";
+
 
     useEffect(()=>{
+
         retrieveProducts();
 
     },[retrieveProducts]);
 
-    useEffect(()=>{
-        if(products.length > 0){
 
-            console.log("products is = ",products);
-            console.log("included Data is = ",includedData);
-
-
-
-
-        }
-    },[products]);
 
 
     const filterData =
@@ -93,50 +85,11 @@ const ProductList = props=>{
         );
 
 
-  const priceResult= (data,dataItem)=>{
-
-      if(data.priceArray.length > 0){
-          if(data.priceArray[0] === dataItem.id && dataItem.type === "price"){
-              // only get one supportive country currency
-              return dataItem.attributes['price.currencyid']+" "+ dataItem.attributes['price.value']
-          }
-      }
-
-      return "";
-
-  }
-
-  const colorAttribute = (data,dataItem)=>{
-      if(data.attributeArray.length > 0){
 
 
 
-          if(dataItem.type === "attribute" && dataItem.attributes['attribute.type'] === 'color' && data.attributeArray.find(item=>item === dataItem.id)){
-             console.log(" color name is = ", dataItem.attributes['attribute.label']," product Id = ",data.id);
-          }
-          // if(data.at[0] === dataItem.id && dataItem.type === "price"){
-          //     // only get one supportive country currency
-          //     return dataItem.attributes['price.currencyid']+" "+ dataItem.attributes['price.value']
-          // }
-      }
 
-      return "";
-  }
 
-  const media = (data,dataItem)=>{
-      colorAttribute(data,dataItem);
-
-      if(data.mediaArray.length > 0){
-          if(data.mediaArray[0] === dataItem.id && dataItem.type === "media"){
-              // only get one supportive country currency
-
-              return  dataItem.attributes['media.url'];
-          }
-      }
-
-      return "";
-
-  }
 
 
 
@@ -156,9 +109,9 @@ const ProductList = props=>{
 
 
                 {
-                    includedData.map(dataItem=>(
+                    includedData.map((dataItem,i)=>(
                         media(data,dataItem) ?
-                        <img src={   media(data,dataItem).includes("https://") ? media(data,dataItem) : "http://127.0.0.1:8000/"+media(data,dataItem)}  className={classes.diamondImg}/>
+                        <img key={i} src={   media(data,dataItem).includes("https://") ? media(data,dataItem) : "http://127.0.0.1:8000/"+media(data,dataItem)}  className={classes.diamondImg}/>
                         : ""
 
                     ))
@@ -176,7 +129,7 @@ const ProductList = props=>{
 
 
                         includedData.map((dataItem,i)=>(
-                            <div>{
+                            <div key={i}>{
                              priceResult(data,dataItem)
 
 
@@ -191,8 +144,10 @@ const ProductList = props=>{
         ))
     )
 
+
+
     return (
-        <div className={classes.container}>
+        <div className={classes.container} style={{height:products.length > 2 ? undefined : "100vh"}}>
 
             <ProductListHeader filterSettings={filterSettings} setFilterSettings={setFilterSettings}
             filtersResetState={filters}/>

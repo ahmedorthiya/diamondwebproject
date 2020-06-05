@@ -1,11 +1,11 @@
 import React from "react";
-import "./navbar.css";
+
 import {Paper,TextField,Divider,IconButton} from "@material-ui/core";
 import {Menu as MenuIcon ,Search as SearchIcon ,Directions as DirectionsIcon} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/styles";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {Link} from "react-router-dom";
-
+import "./navbar.css";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +53,8 @@ export default props=>{
 
                 <nav className="navigation__nav">
                    <ul className={"navigation__topbar"}>
-                       <li className={"navigation__topbar_list navigation__topbar_icon"}><Link className={"a-white"} to={"/"}>Icon</Link></li>
+                       <li className={"navigation__topbar_list navigation__topbar_icon"}><Link className={"a-white"} to={"/"}>Home</Link></li>
+                       <li className={"navigation__topbar_list"}><Link className={"a-white"} to={"/cart"}>Cart</Link></li>
                        <li className={"navigation__topbar_list"}><Link className={"a-white"} to={"/login"}>Login</Link></li>
                        <li className={"navigation__topbar_list"}><Link className={"a-white"} to={"/sign-up"}>Create An Account</Link></li>
                        <li className={"navigation__topbar_list"}>
@@ -103,6 +104,9 @@ export default props=>{
                             <span>03</span>Neck</a></li>
                         <li className="navigation__item"><a href={"#"}  className="navigation__link">
                             <span>04</span>Ear</a>
+                        </li>
+                        <li className="navigation__item"><Link to={"/product-list"} href={"#"}  className="navigation__link">
+                            <span>05</span>All lists</Link>
                         </li>
 
                     </ul>

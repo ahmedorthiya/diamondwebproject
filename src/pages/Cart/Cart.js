@@ -5,6 +5,8 @@ import uniqueTansanite from "../../assets/images/Unique_Tansanite_14mm_++.jpg";
 import MenuNoOfItems from "../ProductDetails/MenuNoOfItems";
 import {useDispatch, useSelector} from "react-redux";
 import {addItemToCart} from "../../store/actions/cart";
+import {priceResult, singleMedia} from "../../assets/selectFirstItemFromList";
+import {baseUrl} from "../../assets/url";
 
 const useStyles = makeStyles(theme=>({
     root:{
@@ -27,7 +29,9 @@ const Cart = props=>{
     const classes = useStyles();
 
     const cartItems = useSelector(state=>state.cart.items);
-    const  dispatch = useDispatch();
+      const includedData = useSelector(store=>store.products.includedData);
+     const  dispatch = useDispatch();
+     console.log("cart items is = ",cartItems);
 
 
 
@@ -42,8 +46,9 @@ const Cart = props=>{
 
 
     return(
-        <Grid container className={classes.root}>
+        <Grid container className={classes.root} justify={"center"} alignItems={"center"} style={{height:cartItems.length > 2 ? undefined : "100vh"}}>
             {
+                cartItems.length > 0 ?
                 cartItems.map(item=>(
                     <Grid key={item.id} item container className={classes.container} alignItems={"center"}>
                         <Grid item
@@ -56,10 +61,10 @@ const Cart = props=>{
                             <Grid container direction={"column"}>
                                 <Grid item
                                 >
-                                    <Typography variant={"h4"}>{item.name}</Typography>
+                                    <Typography variant={"h4"}>{item.attributes['product.label']}</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography variant={"subtitle6"}> size- {item.size} | gemstone -  {item.gemstone.name}</Typography>
+                                    {/*<Typography variant={"subtitle6"}> size- {item.size} | gemstone -  {item.gemstone.name}</Typography>*/}
 
                                 </Grid>
                             </Grid>
@@ -73,7 +78,13 @@ const Cart = props=>{
                               lg={4}
                               xl={4}
                         >
-                            <img className={classes.img} src={item.imgSrc} width={"150px"} height={"150px"}/>
+                            {
+                                includedData.map((dataItem,i)=>(
+                                  singleMedia(item,dataItem) ?   <img className={classes.img} key={i} src={   singleMedia(item,dataItem).includes("https://") ? singleMedia(item,dataItem) : baseUrl+singleMedia(item,dataItem)} width={"150px"} height={"150px"}/>: ""
+                                ))
+
+                            }
+
                         </Grid>
 
                         <Grid item
@@ -82,12 +93,18 @@ const Cart = props=>{
                             <Grid container direction={"column"}>
                                 <MenuNoOfItems style={{width:120}}  classes={classes} noOfItems={item.noOfItems} handleChange={(e)=>handleChange(e,item)}/>
 
-                                    {item.noOfItems } x  {item.price}
+                                    {item.noOfItems } x   {
+                                includedData.map((dataItem,i)=>(
+                                    priceResult(item,dataItem)
+                                ))
+
+                            }
 
                             </Grid>
                         </Grid>
                     </Grid>
                 ))
+                    : <Typography variant={"h5"} >Pleases Add Something </Typography>
             }
 
 

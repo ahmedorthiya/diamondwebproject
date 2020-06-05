@@ -3,10 +3,12 @@ import {Grid,Button, Typography,FormControl,InputLabel,Select,MenuItem} from "@m
 import {makeStyles} from "@material-ui/styles";
 
 import MenuNoOfItems from "./MenuNoOfItems";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addItemToCart} from "../../store/actions/cart";
 import dummyData from "../ProductList/dummydata";
 import {btnTransition} from "../../theme/ButtonStyle";
+import {priceResult, singleMedia, allMedia, shortText, longText} from "../../assets/selectFirstItemFromList";
+import {baseUrl} from "../../assets/url";
 
 
 const useStyles = makeStyles(theme=>({
@@ -53,8 +55,12 @@ export default props =>{
     const classes = useStyles();
     const [noOfItems, setItems] = React.useState(1);
     const dispatch = useDispatch();
+    const data = useSelector(store=>store.products.items.find(item=>item.id === props.match.params.id));
+    const includedData= useSelector(store=>store.products.includedData);
 
-    const data=dummyData.find(dData=> dData.id === parseInt(props.match.params.id));
+  //  const data=dummyData.find(dData=> dData.id === parseInt(props.match.params.id));
+
+
 
 
     const handleChange = (event) => {
@@ -80,15 +86,22 @@ export default props =>{
              >
               <Typography variant={"h5"}>
                   {
-                      data.name
+                      data.attributes['product.label']
                   }
               </Typography>
                  <Typography color={"secondary"} variant={"h6"}>
                  {/*    type | size | 10.57ct*/}
-                     {data.gemstone.name} | {data.size} | {data.metal.name} | price- {data.price}
+                     {
+                         includedData.map((dataItem,i)=>    <div key={i}>{
+                             priceResult(data,dataItem)
+
+
+                         }</div>)
+                     }
+                 {/*    {data.gemstone.name} | {data.size} | {data.metal.name} | price- {data.price}*/}
                  </Typography>
                  <Typography color={"secondary"} variant={"subtitle6"}>
-                     {data.description}
+                     {/*{data.description}*/}
                  </Typography>
              </Grid>
             <Grid item
@@ -99,7 +112,18 @@ export default props =>{
                   lg={6}
                   style={{textAlign:"center"}}
                   xl={6} >
-                <img src={data.imgSrc} className={classes.productMainImg}/>
+                {
+                    includedData.map((dataItem,i)=>(
+                        singleMedia(data,dataItem) ?
+                            <img key={i} src={   singleMedia(data,dataItem).includes("https://") ? singleMedia(data,dataItem) : baseUrl+singleMedia(data,dataItem)}  className={classes.productMainImg}/>
+
+                            : ""
+
+                    ))
+
+                }
+
+
             </Grid>
             <Grid item
                   container
@@ -111,15 +135,7 @@ export default props =>{
                   direction={"column"}
             >
 
-             <Grid item container >
-                 {
-                     data.furtherImages.map((img,i)=>(
-                         <img key={i} src={img} alt="" width={"30px"} height={"30px"} />
-                     ))
-                 }
 
-
-             </Grid>
 
 
 
@@ -135,8 +151,11 @@ export default props =>{
 
                <Grid item>
                    <Typography color={"secondary"} variant={"subtitle6"}>
-                       ndustry. Lorem Ipsum has been the industry's standard dummy text ever
-                       since the 1500s, when an unknown printer took a galley of type and scrambled it
+                       {
+                           includedData.map(dataItem=>(
+                               shortText(data,dataItem)
+                           ))
+                       }
 
                    </Typography>
                </Grid>
@@ -144,8 +163,6 @@ export default props =>{
             </Grid>
         </Grid>
             <br/>
-            {
-                data.furtherDetailImages.length > 0 || data.furtherDescription ? (
 
 
 
@@ -161,14 +178,11 @@ export default props =>{
             <br/>
                     <Grid item className={classes.widthSetter}>
                     {
-                        data.furtherDetailImages.length > 0 ?  (
-                            data.furtherDetailImages.map((img,i)=>(
+                       includedData.map((dataItem,i)=>(
+                           <img key={i} src={   allMedia(data,dataItem).includes("https://") ? allMedia(data,dataItem) : baseUrl+allMedia(data,dataItem)} alt="" width={"200px"} height={"200px"} />
 
-                                    <img src={img} key={i} width={"200px"} height={"200px"}/>
+                       ))
 
-
-                            ))
-                        ) : ""
                     }
                     </Grid>
 
@@ -176,14 +190,15 @@ export default props =>{
             <Grid item className={classes.widthSetter}>
                <Typography>
                    {
-                       data.furtherDescription ? data.furtherDescription : ""
+                       includedData.map(dataItem=>(
+                           longText(data,dataItem)
+                       ))
                    }
                </Typography>
             </Grid>
                 </Grid>
             </Grid>
-                ): ""
-            }
+
 
 
 
