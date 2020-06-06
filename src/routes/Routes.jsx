@@ -7,6 +7,7 @@ import RoutesWithLayout from "./RoutesWithLayout";
 import {ProductList, ProductDetails, Cart, LogIn, SignUp, ShippingAddress, Home} from "../pages";
 import {Footer,NavBar} from "../components";
 
+
 export default  props=>{
     return(
         <div>

@@ -94,7 +94,7 @@ const ProductList = props=>{
 
 
     const returnData = data=>(
-        products.map(data=>( <Grid
+        data.map(data=>( <Grid
                 key={data.id}
                 item
                 lg={4}
@@ -157,12 +157,12 @@ const ProductList = props=>{
         <Grid container justify={"center"} style={{width:"80%",margin:"auto",  textAlign:"center",}} >
             {
 
-                filterSettings.setFilter ? filterData.length === 0 ? (<Grid item>
+             products.length > 0 ?   filterSettings.setFilter ? filterData.length === 0 ? (<Grid item>
                     <br/><br/>
                     <Typography variant={"h5"} color={"primary"}>
                         No result is found. Please set correct filters
                     </Typography>
-                </Grid>) : (returnData(filterData)):returnData(dummyData)
+                </Grid>) : (returnData(filterData)):returnData(products) : " Please wait diamonds is loading..."
 
             }
 

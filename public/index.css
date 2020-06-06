@@ -5,6 +5,9 @@ a:link,a:visited,a:hover,a{
 .a-white{
     color:white;
 }
+.text-center{
+    text-align: center;
+}
 
 
 /*body{*/
