@@ -6,6 +6,7 @@ import {makeStyles} from "@material-ui/styles";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {Link} from "react-router-dom";
 import "./navbar.css";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,15 +37,25 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
+
 export default props=>{
     const classes = useStyles();
     const [value, setValue] = React.useState(options[0]);
     const [inputValue, setInputValue] = React.useState('');
+    const token = useSelector(store=>store.login.token);
+    const [checked,setChecked] = React.useState(false);
+
+    const checkedCheckbox = ()=>{
+         setChecked(false);
+    }
 
     return(
         <div className="navigation">
 
-            <input type="checkbox" className="navigation__checkbox" id="navi-toggle" />
+            <input type="checkbox"  checked={checked} className="navigation__checkbox" id="navi-toggle"
+                   onChange={() => setChecked(!checked)}
+            />
                 <label htmlFor="navi-toggle" className="navigation__button">
                     <span className="navigation__icon">&nbsp; </span>
 
@@ -53,10 +64,25 @@ export default props=>{
 
                 <nav className="navigation__nav">
                    <ul className={"navigation__topbar"}>
-                       <li className={"navigation__topbar_list navigation__topbar_icon"}><Link className={"a-white"} to={"/"}>Home</Link></li>
-                       <li className={"navigation__topbar_list"}><Link className={"a-white"} to={"/cart"}>Cart</Link></li>
-                       <li className={"navigation__topbar_list"}><Link className={"a-white"} to={"/login"}>Login</Link></li>
-                       <li className={"navigation__topbar_list"}><Link className={"a-white"} to={"/sign-up"}>Create An Account</Link></li>
+                       <li className={"navigation__topbar_list navigation__topbar_icon"}><Link onClick={checkedCheckbox} className={"a-white"} to={"/"}>Home</Link></li>
+                       <li className={"navigation__topbar_list"}><Link className={"a-white"} onClick={checkedCheckbox} to={"/cart"}>Cart</Link></li>
+
+                       {
+                           !token ? (
+                              <div style={{display:'flex'}}>
+                                  <li className={"navigation__topbar_list"}><Link className={"a-white"} onClick={checkedCheckbox} to={"/auth"}>Login</Link></li>
+                                  <li className={"navigation__topbar_list"}><Link className={"a-white"} onClick={checkedCheckbox} to={"/sign-up"}>Create An Account</Link></li>
+
+                              </div>
+                           ) : (   <div style={{display:'flex'}}>
+                                   <li className={"navigation__topbar_list"}><Link className={"a-white"} onClick={checkedCheckbox} to={"/logout"}>Logout</Link></li>
+                                   <li className={"navigation__topbar_list"}><Link className={"a-white"} onClick={checkedCheckbox} to={"/shipping-address"}>Shipping Address</Link></li>
+
+                               </div>
+                           )
+                       }
+
+
                        <li className={"navigation__topbar_list"}>
 
                            <Paper  className={classes.root}>
@@ -71,6 +97,7 @@ export default props=>{
                                        setValue(newValue);
                                    }}
                                    inputValue={inputValue}
+
                                    onInputChange={(event, newInputValue) => {
                                        setInputValue(newInputValue);
                                    }}
@@ -105,7 +132,7 @@ export default props=>{
                         <li className="navigation__item"><a href={"#"}  className="navigation__link">
                             <span>04</span>Ear</a>
                         </li>
-                        <li className="navigation__item"><Link to={"/product-list"} href={"#"}  className="navigation__link">
+                        <li className="navigation__item"><Link to={"/product-list"} onClick={checkedCheckbox} href={"#"}  className="navigation__link">
                             <span>05</span>All lists</Link>
                         </li>
 

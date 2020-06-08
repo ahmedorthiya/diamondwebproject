@@ -4,7 +4,7 @@
 4- Now your project is ready now
 
 Navbar responsive issue remaining
-Build login,signup, shipping-address page
+Build auth,signup, shipping-address page
 dropdown design
 button animation design
 

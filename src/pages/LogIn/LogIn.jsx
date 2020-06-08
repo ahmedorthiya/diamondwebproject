@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useState} from "react";
 import {Grid, TextField, Button, Typography} from "@material-ui/core";
 import facebook from "../../assets/images/social-icons/facebook.svg";
 import insta from "../../assets/images/social-icons/insta.svg";
@@ -7,8 +7,23 @@ import twitter from "../../assets/images/social-icons/twitter.svg";
 import pinterest from "../../assets/images/social-icons/pinterest.svg";
 import clsx from "clsx";
 import useStyles from "./login.style";
+import axios from "axios";
+import {useDispatch} from "react-redux";
+import {login} from "../../store/actions/auth";
 
 const LogIn = props=>{
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
+    const [message,setMessage] = useState('');
+    const dispatch = useDispatch();
+    const loginUser = async ()=>{
+        setMessage("Please wait...");
+        await dispatch(login({email,password}));
+        props.history.push("/product-list");
+
+    };
+
+
    const classes = useStyles();
     return(
           <Grid container direction={"column"} className={classes.root} justify={"center"} alignItems={"center"}>
@@ -44,17 +59,20 @@ const LogIn = props=>{
               <br/><br/>
 
               <Grid item>
-                  <TextField className={classes.inputBox} type={"email"} label={"Email"}/>
+                  <TextField className={classes.inputBox} onChange={e=>setEmail(e.target.value)} type={"email"} label={"Email"}/>
 
               </Grid>
               <Grid item>
-                  <TextField className={classes.inputBox} type={"password"} label={"Password"}/>
+                  <TextField className={classes.inputBox} onChange={e=>setPassword(e.target.value)} type={"password"} label={"Password"}/>
               </Grid>
 
               <br/>
               <Grid item>
-                  <Button className={clsx(classes.inputBox,classes.btnStyle)} color={"primary"} >Login</Button>
+                  <Button className={clsx(classes.inputBox,classes.btnStyle)} onClick={loginUser} color={"primary"} >Login</Button>
               </Grid>
+              {
+                  message
+              }
 
           </Grid>
     )
