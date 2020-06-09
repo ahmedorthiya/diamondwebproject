@@ -7,7 +7,7 @@ export const addProducts = ()=>async dispatch =>{
         method:"GET",
         url:"http://localhost:8000/jsonapi/product?include=attribute,media,price,product,product/property,text&page%5Boffset%5D=0", // return price and page[offset]=
 
-        headers:{ "Access-Control-Allow-Origin": "*",}
+        headers:{ "Access-Control-Allow-Origin": "*",withCredentials:true}
     })
 
     const productList = [];
@@ -96,6 +96,7 @@ export const addProducts = ()=>async dispatch =>{
         payload :{
             itemData:productList,
             includedData:res.data.included,
+            meta:res.data.meta,
 
         } ,
     })

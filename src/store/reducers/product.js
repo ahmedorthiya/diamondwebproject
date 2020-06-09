@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage'
 const initialState= {
     items:[],
     includedData:[],
+    meta:"",
 
 
 }
@@ -17,10 +18,12 @@ const product =  (state=initialState,actions)=>{
             //  items:[...state.items,...actions.payload.itemData],
             //                includedData: [...state.includedData,...actions.payload.includedData],
 
+
             return{
                 ...state,
                items:[...actions.payload.itemData],
                includedData: [...actions.payload.includedData],
+                meta:actions.payload.meta,
             }
         default:
             return state;

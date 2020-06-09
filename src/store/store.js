@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
     headers:{
         "Accept": "application/json",
         "Content-type": "application/json",
+
     }
 });
 

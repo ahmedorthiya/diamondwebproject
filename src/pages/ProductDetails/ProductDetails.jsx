@@ -55,6 +55,9 @@ export default props =>{
     const classes = useStyles();
     const [noOfItems, setItems] = React.useState(1);
     const dispatch = useDispatch();
+    const meta = useSelector(store=>store.products.meta);
+    const token = useSelector(store=>store.login.token);
+
     const data = useSelector(store=>store.products.items.find(item=>item.id === props.match.params.id));
     const includedData= useSelector(store=>store.products.includedData);
 
@@ -71,7 +74,7 @@ export default props =>{
         dispatch(addItemToCart({
             ...data,
             noOfItems:noOfItems ? noOfItems : 1,
-        }));
+        },meta,token));
     }
 
     return(
